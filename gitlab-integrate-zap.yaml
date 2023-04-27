@@ -1,0 +1,24 @@
+link: https://github.com/asecurityguru/devsecops-gitlab-dast-with-owasp-zap-repo/blob/main/.gitlab-ci.yml
+
+stages:
+    - runDASTScanUsingZAP
+
+run-dast-job:
+    stage: runDASTScanUsingZAP
+    image: maven:3.8.5-openjdk-11-slim
+    script: |
+      apt-get update
+      apt-get -y install wget
+      wget https://github.com/zaproxy/zaproxy/releases/download/v2.11.1/ZAP_2.11.1_Linux.tar.gz
+      mkdir zap
+      tar -xvf ZAP_2.11.1_Linux.tar.gz
+      cd ZAP_2.11.1
+      ./zap.sh -cmd -quickurl https://www.example.com -quickprogress -quickout ../zap_report.html 
+    artifacts:
+      paths:
+        - zap_report.html
+
+    # quickurl accepts the URL of the web application you are scanning
+    # quickprogress shows the % progress in logs
+    # quickout to generate zap report
+    # Artifacts keyword is used to publish artifacts for our pipeline with path of where to store that artifact

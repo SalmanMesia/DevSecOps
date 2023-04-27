@@ -21,4 +21,21 @@ Settings > Repository > Default Branch > Select `master`
 # .gitlab-ci.yaml
 - Define `Stages`
 - create `jobs` which defines which `stage` it runs and use `script` to run scripts
-- 
+
+## SonarCloud (sonarcloud.io)
+
+SaaS platfrom that keeps source code free from:
++ Code Quality issues
++ Code Security issues
++ Define quality gates in project (such as 90% code coverage)
+
+## Quality Gates
+
+Used to fail our builds in case security vuln are identified in source code by security tools; Enabled to prevent source code from progressing to next step of Software Life Cycle Development
+
+## Snyk (snyk.io)
+
++ Helps security issues in third-party / open source libraries (SCA)
++ Container security
++ Infra as Code security (Config issues)
++ 

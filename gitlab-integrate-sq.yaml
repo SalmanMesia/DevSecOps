@@ -1,0 +1,25 @@
+stages:
+  - runSonarCloud
+
+run-sonarcloud-job:
+  stage: runSonarCloud
+  # We need Java and maven so we need this image
+  # GitLab will provide a runner machine which will have this image installed on the machine with Java and maven
+  image: maven:3.8.5-openjdk-11-slim
+  
+  # verify keyword runs unit tests in our source code
+  # package cmd packages our source code
+  # sonar:sonar to run SonarCloud analysis on our code
+  script: | # Pipe symbol used when we want to run multiple commands with a linebreak together
+    mvn verify package sonar:sonar -Dsonar.host.url="https://sonarcloud.io" -Dsonar.organization=ORG -Dsonar.projectKey=PROJECT_KEY -Dsonar.login=LOGIN_TOKEN
+
+
+
+# To Enable Custom Quality Gate
+# we add apt-get curl and jq to use this script
+      apt-get update
+      apt-get -y install curl jq
+      sleep 5 
+      quality_status=$(curl -s -u <LOGIN_TOKEN>:  https://sonarcloud.io/api/qualitygates/project_status?projectKey=<PROJECT_NAME> | jq -r '.projectStatus.status')
+      echo "SonarCloud Analysis Status is $quality_status"; 
+      if [[ $quality_status == "ERROR" ]] ; then exit 1;fi
